@@ -42,7 +42,7 @@ var replaceVars = function(string)
 return string.toString().replace(/{{.+?}}/g, function(match)
 {
 var varName = match.substr(2, match.length - 4);
-var varValue = environment[varName] || globals[varName];
+var varValue = pm.environment[varName] || pm.globals[varName];
 return varValue ? replaceVars(varValue) : match; // recursive!
 });
 };
@@ -52,7 +52,7 @@ return varValue ? replaceVars(varValue) : match; // recursive!
 var random = crypto.lib.WordArray.random(16);
  
 //get path expanding any variables that exist
-var fullPath = replaceVars(request.url);
+var fullPath = replaceVars(pm.request.url);
 var loc = new sdk.Url(fullPath);
 var path = loc.getPath();
  
@@ -97,4 +97,4 @@ var authHeaderValue = verintAuthId + " " + "salt=" + salt + "," + "iat=" +
 issuedAt + "," + "kid=" + APIKeyId + "," + "sig=" + 
 urlConvertBase64(signature);
  
-postman.setGlobalVariable("Authorization", authHeaderValue);
+pm.globals.set("Authorization", authHeaderValue);
